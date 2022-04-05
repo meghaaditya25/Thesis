@@ -1,0 +1,525 @@
+version 2
+run AckingMacWithUnitDiskRadio-0-20220217-13:45:06-4044
+attr configname AckingMacWithUnitDiskRadio
+attr datetime 20220217-13:45:06
+attr experiment AckingMacWithUnitDiskRadio
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsf ""
+attr measurement ""
+attr network TestNic
+attr processid 4044
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+param *.host[*].wlan[*].typename "\"AckingWirelessInterface\""
+param *.host[*].wlan[*].bitrate 2Mbps
+param *.host[*].wlan[*].mac.headerLength 25B
+param *.radioMedium.typename "\"UnitDiskRadioMedium\""
+param *.host[*].wlan[*].radio.typename "\"UnitDiskRadio\""
+param *.host[*].wlan[*].radio.transmitter.bitrate 2Mbps
+param *.host[*].wlan[*].radio.transmitter.preambleDuration 0s
+param *.host[*].wlan[*].radio.transmitter.headerLength 96b
+param *.host[*].wlan[*].radio.transmitter.communicationRange 100m
+param *.host[*].wlan[*].radio.transmitter.interferenceRange 0m
+param *.host[*].wlan[*].radio.transmitter.detectionRange 0m
+param *.host[*].wlan[*].radio.receiver.ignoreInterference true
+param *.numHosts 2
+param **.host[0].numPcapRecorders 1
+param **.host[0].pcapRecorder[*].pcapFile "\"results/pcapfile.pcap\""
+param **.host[0].pcapRecorder[*].helpers "\"inet::AckingMacToEthernetPcapRecorderHelper\""
+param **.host[0].pcapRecorder[*].sendingSignalnames "\"sentDownPk\""
+param **.host[0].pcapRecorder[*].receivingSignalNames "\"packetReceivedFromLower\""
+param **.host[0].pcapRecorder[*].dumpProtocols "\"ackingmac\""
+param **.host[0].pcapRecorder[*].alwaysFlush true
+param **.crcMode "\"computed\""
+param **.fcsMode "\"computed\""
+param *.host[*].mobility.typename "\"MassMobility\""
+param *.host[*].mobility.constraintAreaMinX 0m
+param *.host[*].mobility.constraintAreaMinY 0m
+param *.host[*].mobility.constraintAreaMinZ 0m
+param *.host[*].mobility.constraintAreaMaxX 60m
+param *.host[*].mobility.constraintAreaMaxY 40m
+param *.host[*].mobility.constraintAreaMaxZ 0m
+param *.host[*].mobility.initFromDisplayString false
+param *.host[*].mobility.changeInterval "truncnormal(2s, 0.5s)"
+param *.host[*].mobility.angleDelta "normal(0deg, 30deg)"
+param *.host[*].mobility.speed "truncnormal(20mps, 8mps)"
+param *.host[*].mobility.updateInterval 100ms
+param *.host[0].numApps 0
+param *.host[*].numApps 1
+param *.host[*].app[0].typename "\"PingApp\""
+param *.host[*].app[*].destAddr "\"host[0]\""
+param *.host[*].app[*].printPing true
+
+vector 0 TestNic.host[0].wlan[0].radio radioMode:vector ETV
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, vector"
+vector 1 TestNic.host[1].wlan[0].radio radioMode:vector ETV
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, vector"
+vector 2 TestNic.host[0].wlan[0].radio receptionState:vector ETV
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, vector"
+vector 3 TestNic.host[0].wlan[0].radio transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, vector"
+vector 4 TestNic.host[1].wlan[0].radio receptionState:vector ETV
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, vector"
+vector 5 TestNic.host[1].wlan[0].radio transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, vector"
+vector 6 TestNic.host[1].app[0] pingTxSeq:vector ETV
+attr interpolationmode none
+attr title "ping tx seq, vector"
+vector 7 TestNic.host[1].ipv4.arp arpRequestSent:vector(packetBytes) ETV
+attr source arpRequestSent
+attr title "ARP request sent, vector(packetBytes)"
+vector 8 TestNic.host[1].wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 9 TestNic.host[1].wlan[0].mac.queue packetPushed:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "packet pushed, vector(packetBytes)"
+vector 10 TestNic.host[1].wlan[0].mac.queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr source "count(packetPushed) - count(packetPopped) - count(packetRemoved) - count(packetDropped)"
+attr title "queue length, vector"
+vector 11 TestNic.host[1].wlan[0].mac.queue packetPopped:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "packet popped, vector(packetBytes)"
+vector 12 TestNic.host[1].wlan[0].mac.queue queueingTime:vector ETV
+attr interpolationmode none
+attr source queueingTime(packetPopped)
+attr title "queueing times, vector"
+attr unit s
+vector 13 TestNic.host[1].wlan[0].mac sentDownPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, vector(packetBytes)"
+vector 14 TestNic.host[0].wlan[0].mac rcvdPkFromLl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, vector(packetBytes)"
+vector 15 TestNic.host[0].wlan[0].mac passedUpPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, vector(packetBytes)"
+vector 16 TestNic.host[0].ipv4.arp arpReplySent:vector(packetBytes) ETV
+attr source arpReplySent
+attr title "ARP replies sent, vector(packetBytes)"
+vector 17 TestNic.host[0].wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 18 TestNic.host[0].wlan[0].mac.queue packetPushed:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "packet pushed, vector(packetBytes)"
+vector 19 TestNic.host[0].wlan[0].mac.queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr source "count(packetPushed) - count(packetPopped) - count(packetRemoved) - count(packetDropped)"
+attr title "queue length, vector"
+vector 20 TestNic.host[0].wlan[0].mac.queue packetPopped:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "packet popped, vector(packetBytes)"
+vector 21 TestNic.host[0].wlan[0].mac.queue queueingTime:vector ETV
+attr interpolationmode none
+attr source queueingTime(packetPopped)
+attr title "queueing times, vector"
+attr unit s
+vector 22 TestNic.host[0].wlan[0].mac sentDownPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, vector(packetBytes)"
+vector 23 TestNic.host[1].wlan[0].mac rcvdPkFromLl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, vector(packetBytes)"
+vector 24 TestNic.host[1].wlan[0].mac passedUpPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, vector(packetBytes)"
+vector 25 TestNic.host[1].app[0] pingRxSeq:vector ETV
+attr interpolationmode none
+attr title "ping rx seq, vector"
+vector 26 TestNic.host[1].app[0] rtt:vector ETV
+attr interpolationmode none
+attr title "ping round-trip time, vector"
+attr unit s
+0	0	0	0
+0	0	0	0
+0	0	0	4
+1	0	0	0
+1	0	0	0
+1	0	0	4
+2	0	0	1
+2	16	0.548813634951	3
+2	18	0.549073634951	1
+2	30	0.549333900231	3
+2	32	0.549817900231	1
+2	74	1.548813582508	3
+2	76	1.549297582508	1
+2	117	2.548813544823	3
+2	119	2.549297544823	1
+2	159	3.54881355481	3
+2	161	3.54929755481	1
+2	203	4.54881353649	3
+2	205	4.54929753649	1
+2	245	5.548813578011	3
+2	247	5.549297578011	1
+2	288	6.548813598507	3
+2	290	6.549297598507	1
+2	330	7.54881355408	3
+2	332	7.54929755408	1
+2	374	8.548813568832	3
+2	376	8.549297568832	1
+2	417	9.548813572788	3
+2	419	9.549297572788	1
+2	459	10.548813562766	3
+2	461	10.549297562766	1
+3	0	0	1
+3	22	0.549073634951	2
+3	24	0.549333634951	1
+3	38	0.549817900231	2
+3	40	0.550301900231	1
+3	82	1.549297582508	2
+3	84	1.549781582508	1
+3	125	2.549297544823	2
+3	127	2.549781544823	1
+3	167	3.54929755481	2
+3	169	3.54978155481	1
+3	211	4.54929753649	2
+3	213	4.54978153649	1
+3	253	5.549297578011	2
+3	255	5.549781578011	1
+3	296	6.549297598507	2
+3	298	6.549781598507	1
+3	338	7.54929755408	2
+3	340	7.54978155408	1
+3	382	8.549297568832	2
+3	384	8.549781568832	1
+3	425	9.549297572788	2
+3	427	9.549781572788	1
+3	467	10.549297562766	2
+3	469	10.549781562766	1
+4	0	0	1
+4	23	0.549073767593	3
+4	25	0.549333767593	1
+4	39	0.549818032861	3
+4	41	0.550302032861	1
+4	83	1.549297662694	3
+4	85	1.549781662694	1
+4	126	2.549297587311	3
+4	128	2.549781587311	1
+4	168	3.549297607324	3
+4	170	3.549781607324	1
+4	212	4.549297570597	3
+4	214	4.549781570597	1
+4	254	5.549297653765	3
+4	256	5.549781653765	1
+4	297	6.549297694715	3
+4	299	6.549781694715	1
+4	339	7.549297605851	3
+4	341	7.549781605851	1
+4	383	8.549297635431	3
+4	385	8.549781635431	1
+4	426	9.549297643282	3
+4	428	9.549781643282	1
+4	468	10.549297623204	3
+4	470	10.549781623204	1
+5	0	0	1
+5	15	0.548813502304	2
+5	17	0.549073502304	1
+5	29	0.549333767593	2
+5	31	0.549817767593	1
+5	73	1.548813502304	2
+5	75	1.549297502304	1
+5	116	2.548813502304	2
+5	118	2.549297502304	1
+5	158	3.548813502304	2
+5	160	3.549297502304	1
+5	202	4.548813502304	2
+5	204	4.549297502304	1
+5	244	5.548813502304	2
+5	246	5.549297502304	1
+5	287	6.548813502304	2
+5	289	6.549297502304	1
+5	329	7.548813502304	2
+5	331	7.549297502304	1
+5	373	8.548813502304	2
+5	375	8.549297502304	1
+5	416	9.548813502304	2
+5	418	9.549297502304	1
+5	458	10.548813502304	2
+5	460	10.549297502304	1
+5	500	11.548813502304	2
+6	11	0.548813502304	0
+6	70	1.548813502304	1
+6	113	2.548813502304	2
+6	155	3.548813502304	3
+6	199	4.548813502304	4
+6	241	5.548813502304	5
+6	284	6.548813502304	6
+6	326	7.548813502304	7
+6	370	8.548813502304	8
+6	413	9.548813502304	9
+6	455	10.548813502304	10
+6	497	11.548813502304	11
+7	13	0.548813502304	28
+8	14	0.548813502304	28
+8	28	0.549333767593	84
+8	72	1.548813502304	84
+8	115	2.548813502304	84
+8	157	3.548813502304	84
+8	201	4.548813502304	84
+8	243	5.548813502304	84
+8	286	6.548813502304	84
+8	328	7.548813502304	84
+8	372	8.548813502304	84
+8	415	9.548813502304	84
+8	457	10.548813502304	84
+8	499	11.548813502304	84
+9	14	0.548813502304	28
+9	28	0.549333767593	84
+9	72	1.548813502304	84
+9	115	2.548813502304	84
+9	157	3.548813502304	84
+9	201	4.548813502304	84
+9	243	5.548813502304	84
+9	286	6.548813502304	84
+9	328	7.548813502304	84
+9	372	8.548813502304	84
+9	415	9.548813502304	84
+9	457	10.548813502304	84
+9	499	11.548813502304	84
+10	14	0.548813502304	1
+10	14	0.548813502304	0
+10	28	0.549333767593	1
+10	28	0.549333767593	0
+10	72	1.548813502304	1
+10	72	1.548813502304	0
+10	115	2.548813502304	1
+10	115	2.548813502304	0
+10	157	3.548813502304	1
+10	157	3.548813502304	0
+10	201	4.548813502304	1
+10	201	4.548813502304	0
+10	243	5.548813502304	1
+10	243	5.548813502304	0
+10	286	6.548813502304	1
+10	286	6.548813502304	0
+10	328	7.548813502304	1
+10	328	7.548813502304	0
+10	372	8.548813502304	1
+10	372	8.548813502304	0
+10	415	9.548813502304	1
+10	415	9.548813502304	0
+10	457	10.548813502304	1
+10	457	10.548813502304	0
+10	499	11.548813502304	1
+10	499	11.548813502304	0
+11	14	0.548813502304	28
+11	28	0.549333767593	84
+11	72	1.548813502304	84
+11	115	2.548813502304	84
+11	157	3.548813502304	84
+11	201	4.548813502304	84
+11	243	5.548813502304	84
+11	286	6.548813502304	84
+11	328	7.548813502304	84
+11	372	8.548813502304	84
+11	415	9.548813502304	84
+11	457	10.548813502304	84
+11	499	11.548813502304	84
+12	14	0.548813502304	0
+12	28	0.549333767593	0
+12	72	1.548813502304	0
+12	115	2.548813502304	0
+12	157	3.548813502304	0
+12	201	4.548813502304	0
+12	243	5.548813502304	0
+12	286	6.548813502304	0
+12	328	7.548813502304	0
+12	372	8.548813502304	0
+12	415	9.548813502304	0
+12	457	10.548813502304	0
+12	499	11.548813502304	0
+13	14	0.548813502304	53
+13	28	0.549333767593	109
+13	72	1.548813502304	109
+13	115	2.548813502304	109
+13	157	3.548813502304	109
+13	201	4.548813502304	109
+13	243	5.548813502304	109
+13	286	6.548813502304	109
+13	328	7.548813502304	109
+13	372	8.548813502304	109
+13	415	9.548813502304	109
+13	457	10.548813502304	109
+13	499	11.548813502304	109
+14	19	0.549073634951	53
+14	33	0.549817900231	109
+14	77	1.549297582508	109
+14	120	2.549297544823	109
+14	162	3.54929755481	109
+14	206	4.54929753649	109
+14	248	5.549297578011	109
+14	291	6.549297598507	109
+14	333	7.54929755408	109
+14	377	8.549297568832	109
+14	420	9.549297572788	109
+14	462	10.549297562766	109
+15	19	0.549073634951	28
+15	33	0.549817900231	84
+15	77	1.549297582508	84
+15	120	2.549297544823	84
+15	162	3.54929755481	84
+15	206	4.54929753649	84
+15	248	5.549297578011	84
+15	291	6.549297598507	84
+15	333	7.54929755408	84
+15	377	8.549297568832	84
+15	420	9.549297572788	84
+15	462	10.549297562766	84
+16	20	0.549073634951	28
+17	21	0.549073634951	28
+17	37	0.549817900231	84
+17	81	1.549297582508	84
+17	124	2.549297544823	84
+17	166	3.54929755481	84
+17	210	4.54929753649	84
+17	252	5.549297578011	84
+17	295	6.549297598507	84
+17	337	7.54929755408	84
+17	381	8.549297568832	84
+17	424	9.549297572788	84
+17	466	10.549297562766	84
+18	21	0.549073634951	28
+18	37	0.549817900231	84
+18	81	1.549297582508	84
+18	124	2.549297544823	84
+18	166	3.54929755481	84
+18	210	4.54929753649	84
+18	252	5.549297578011	84
+18	295	6.549297598507	84
+18	337	7.54929755408	84
+18	381	8.549297568832	84
+18	424	9.549297572788	84
+18	466	10.549297562766	84
+19	21	0.549073634951	1
+19	21	0.549073634951	0
+19	37	0.549817900231	1
+19	37	0.549817900231	0
+19	81	1.549297582508	1
+19	81	1.549297582508	0
+19	124	2.549297544823	1
+19	124	2.549297544823	0
+19	166	3.54929755481	1
+19	166	3.54929755481	0
+19	210	4.54929753649	1
+19	210	4.54929753649	0
+19	252	5.549297578011	1
+19	252	5.549297578011	0
+19	295	6.549297598507	1
+19	295	6.549297598507	0
+19	337	7.54929755408	1
+19	337	7.54929755408	0
+19	381	8.549297568832	1
+19	381	8.549297568832	0
+19	424	9.549297572788	1
+19	424	9.549297572788	0
+19	466	10.549297562766	1
+19	466	10.549297562766	0
+20	21	0.549073634951	28
+20	37	0.549817900231	84
+20	81	1.549297582508	84
+20	124	2.549297544823	84
+20	166	3.54929755481	84
+20	210	4.54929753649	84
+20	252	5.549297578011	84
+20	295	6.549297598507	84
+20	337	7.54929755408	84
+20	381	8.549297568832	84
+20	424	9.549297572788	84
+20	466	10.549297562766	84
+21	21	0.549073634951	0
+21	37	0.549817900231	0
+21	81	1.549297582508	0
+21	124	2.549297544823	0
+21	166	3.54929755481	0
+21	210	4.54929753649	0
+21	252	5.549297578011	0
+21	295	6.549297598507	0
+21	337	7.54929755408	0
+21	381	8.549297568832	0
+21	424	9.549297572788	0
+21	466	10.549297562766	0
+22	21	0.549073634951	53
+22	37	0.549817900231	109
+22	81	1.549297582508	109
+22	124	2.549297544823	109
+22	166	3.54929755481	109
+22	210	4.54929753649	109
+22	252	5.549297578011	109
+22	295	6.549297598507	109
+22	337	7.54929755408	109
+22	381	8.549297568832	109
+22	424	9.549297572788	109
+22	466	10.549297562766	109
+23	26	0.549333767593	53
+23	42	0.550302032861	109
+23	86	1.549781662694	109
+23	129	2.549781587311	109
+23	171	3.549781607324	109
+23	215	4.549781570597	109
+23	257	5.549781653765	109
+23	300	6.549781694715	109
+23	342	7.549781605851	109
+23	386	8.549781635431	109
+23	429	9.549781643282	109
+23	471	10.549781623204	109
+24	26	0.549333767593	28
+24	42	0.550302032861	84
+24	86	1.549781662694	84
+24	129	2.549781587311	84
+24	171	3.549781607324	84
+24	215	4.549781570597	84
+24	257	5.549781653765	84
+24	300	6.549781694715	84
+24	342	7.549781605851	84
+24	386	8.549781635431	84
+24	429	9.549781643282	84
+24	471	10.549781623204	84
+25	44	0.550302032861	0
+25	88	1.549781662694	1
+25	131	2.549781587311	2
+25	173	3.549781607324	3
+25	217	4.549781570597	4
+25	259	5.549781653765	5
+25	302	6.549781694715	6
+25	344	7.549781605851	7
+25	388	8.549781635431	8
+25	431	9.549781643282	9
+25	473	10.549781623204	10
+26	44	0.550302032861	0.001488530557
+26	88	1.549781662694	0.00096816039
+26	131	2.549781587311	0.000968085007
+26	173	3.549781607324	0.00096810502
+26	217	4.549781570597	0.000968068293
+26	259	5.549781653765	0.000968151461
+26	302	6.549781694715	0.000968192411
+26	344	7.549781605851	0.000968103547
+26	388	8.549781635431	0.000968133127
+26	431	9.549781643282	0.000968140978
+26	473	10.549781623204	0.0009681209
+
